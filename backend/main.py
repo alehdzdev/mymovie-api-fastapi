@@ -3,10 +3,10 @@ from typing import Annotated, Dict
 # Third Party
 from fastapi import FastAPI, Path, Query, status
 from fastapi.responses import HTMLResponse, JSONResponse
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 
 # Local
-# from jwt_manager import create_token
+from jwt_manager import create_token
 
 
 app = FastAPI()
@@ -15,7 +15,7 @@ app.version = '0.0.1'
 
 
 class User(BaseModel):
-    email: str
+    email: EmailStr
     password: str
 
 
@@ -58,7 +58,9 @@ async def hello_world():
 
 @app.post('/login', tags=['auth'])
 async def login(user: User):
-    return user
+    if user.email == "user@example.com" and user.password == "string":
+        token: str = create_token(user.dict())
+        return {token}
 
 
 @app.get('/movies', tags=['movies'])
