@@ -5,11 +5,11 @@ services:
     image: mymovie-api:1.0.0
     build: .
     volumes:
-      - .:/backend
+      - ./backend:/backend
     ports:
       - 8000:8000
     depends_on:
-        - db
+      - db
     env_file:
       - .env
   db:
