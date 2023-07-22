@@ -3,7 +3,9 @@ version: '3.8'
 services:
   web:
     image: mymovie-api:1.0.0
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
       - ./backend:/backend
     ports:
@@ -12,14 +14,23 @@ services:
       - db
     env_file:
       - .env
+    networks:
+      - mymovie-network
   db:
     image: postgres
     ports:
       - "5432:5432"
     volumes:
       - dbdata:/var/lib/postgresql/data
-    env_file:
-      - .env
+    environment:
+      - POSTGRES_USER=mymovie-user
+      - POSTGRES_PASSWORD=mymovie
+      - POSTGRES_DB=mymovie
+    networks:
+      - mymovie-network
+
+networks:
+  mymovie-network:
 
 volumes:
   dbdata:
